@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ESP32 Waste Monitor</title>
+  <script src="chart.js"></script>
+</head>
+<body>
+<h2>ESP32 Real-time Waste Counter</h2>
+
+<div id="sys"></div>
+
+<table border="1">
+<tr><th>Sensor</th><th>Count</th><th>Status</th></tr>
+<tr><td>Organic</td><td id="c0"></td><td id="s0"></td></tr>
+<tr><td>Recycle</td><td id="c1"></td><td id="s1"></td></tr>
+<tr><td>General</td><td id="c2"></td><td id="s2"></td></tr>
+<tr><td>Hazard</td><td id="c3"></td><td id="s3"></td></tr>
+</table>
+
+<canvas id="chart"></canvas>
+
+<script>
+const ctx = document.getElementById("chart");
+const chart = new Chart(ctx, {
+  type: "bar",
+  data: {
+    labels: ["Organic","Recycle","General","Hazard"],
+    datasets: [{ data: [0,0,0,0] }]
+  }
+});
+
+setInterval(async () => {
+  const s = await fetch("/status").then(r=>r.json());
+  document.getElementById("sys").innerHTML =
+    `RAM:${s.heap} | CPU:${s.cpu}MHz | Uptime:${s.uptime}s`;
+
+  const d = await fetch("/sensors").then(r=>r.json());
+  chart.data.datasets[0].data = [
+    d[0].count,d[1].count,d[2].count,d[3].count
+  ];
+  chart.update();
+
+  for(let i=0;i<4;i++){
+    document.getElementById("c"+i).innerText = d[i].count;
+    document.getElementById("s"+i).innerText =
+      d[i].connected ? "🟢" : "🔴";
+  }
+},1000);
+</script>
+</body>
+</html>
