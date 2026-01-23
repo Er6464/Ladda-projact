@@ -1,3 +1,28 @@
+# ESP32 Waste Monitoring System  
+ระบบเก็บข้อมูลเซ็นเซอร์สำหรับ ESP32
+
+[![PlatformIO](https://img.shields.io/badge/PlatformIO-Framework-blue)](https://platformio.org)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+## ภาพรวมโครงการ
+
+ระบบนี้ใช้ ESP32 DevKit V1 เก็บข้อมูลจาก **เซ็นเซอร์ Ultrasonic HC-SR04 จำนวน 4 ตัว** เพื่อตรวจจับปริมาณขยะ โดยออกแบบให้:
+
+- เก็บข้อมูล**ใน RAM เท่านั้น** (หายเมื่อรีเซ็ต)
+- เริ่มเก็บข้อมูล**เมื่อมีการเชื่อมต่อ WiFi เท่านั้น**
+- มี Web Server แสดงผล Real-time ผ่านเบราว์เซอร์ (AP Mode)
+- ใช้ FreeRTOS จัดการ Task อ่านเซ็นเซอร์
+
+## คุณสมบัติหลัก
+
+- ไม่มีการเก็บข้อมูลถาวร (RAM only)
+- WiFi AP Mode (SSID: `ESP32_FR`, Password: `12345678`)
+- Web UI แสดงจำนวนครั้งที่ตรวจจับ + สถานะเชื่อมต่อของแต่ละเซ็นเซอร์
+- รองรับการรีเซ็ตข้อมูลผ่านปุ่มบนหน้าเว็บ
+- ปรับระยะตรวจจับ (threshold) ได้
+- API แบบ JSON สำหรับดึงข้อมูล
+
+## โครงสร้างไฟล์
 
 ## การต่อเซ็นเซอร์ (HC-SR04 × 4)
 
